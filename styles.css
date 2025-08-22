@@ -109,12 +109,48 @@ h2 {
     color: var(--text-primary);
 }
 
+.experience {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.experience:hover {
+    transform: translateX(4px);
+    border-color: var(--accent);
+}
+
+.experience h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.experience h4 {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-top: -.3rem;
+}
+
+.experience p {
+    color: var(--text-secondary);
+    margin-top: .3rem;
+    margin-bottom: 1rem;
+}
+.experience li {
+    color: var(--text-secondary);
+    margin-top: .3rem;
+    margin-bottom: 1rem;
+}
+
 .project {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     transition: transform 0.2s ease, border-color 0.2s ease;
+    
 }
 
 .project:hover {
@@ -125,7 +161,6 @@ h2 {
 .project h3 {
     font-size: 1.2rem;
     font-weight: 400;
-    margin-bottom: 0.5rem;
 }
 
 .project p {
@@ -134,17 +169,17 @@ h2 {
     margin-bottom: 1rem;
 }
 
-.tech-stack {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
 .project-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: first baseline;
     flex-wrap: wrap;
+    
+}
+
+.project-header h4 {
+    font-size: 1rem;
+    font-weight: 400;
 }
 
 .project-buttons {
@@ -170,6 +205,12 @@ h2 {
     color: rgb(211, 246, 255);
     border-color: var(--accent-bright);
     transform: translateY(-2px)
+}
+
+.tech-stack {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .tech {
