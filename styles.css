@@ -282,3 +282,36 @@ footer {
 section {
     animation: fade-in 0.6s ease-out;
 }
+
+.sparkly {
+    display: inline-block;
+    position: relative;
+    font-weight: bold;
+    cursor: pointer;
+    isolation: isolate;
+    transition: color 0.3s ease;
+    z-index: 0;
+}
+
+.sparkly:hover {
+    color: var(--accent);
+}
+
+.sparkle {
+    position: absolute;
+    display: block;
+    animation: spin 1000ms linear, comeInOut 1000ms forwards;
+    pointer-events: none;
+    /* z-index determined by js */
+}
+
+@keyframes comeInOut {
+    0%   { transform: scale(0); opacity: 0; }
+    50%  { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes spin {
+    from {rotate: 0deg; }
+    to {rotate: 180deg; }
+}

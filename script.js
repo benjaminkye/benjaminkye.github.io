@@ -13,5 +13,5 @@ function initNav() {
 document.addEventListener('DOMContentLoaded', () => {
     initNav()
     initWaves()
+    initSparkle()
 })
-
