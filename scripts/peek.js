@@ -33,6 +33,20 @@ class SpriteCanvas {
     }
 }
 
+function start(sprite) {
+  if(sprite.anim.playbackRate !== 1) {
+    sprite.anim.playbackRate = 1;
+    sprite.anim.play();
+  }
+}
+
+function stop(sprite) {
+  if(sprite.anim.playbackRate !== -1) {
+    sprite.anim.playbackRate = -1;
+    sprite.anim.play();
+  }
+}
+
 function initSnoopy() {
     
     const snoopy = new SpriteCanvas(
@@ -56,24 +70,25 @@ function initSnoopy() {
       snoopy.canvas.style.transform = 'scaleX(-1)';
     }
 
-    console.log('init peek')
     let snoopyText = document.getElementById('snoopy-text')
     
     snoopyText.addEventListener('mouseover', (event) => {
-      console.log('mouse in!');
-      if(snoopy.anim.playbackRate !== 1) {
-        snoopy.anim.playbackRate = 1;
-        snoopy.anim.play();
-      }
+      start(snoopy)
      });
 
      snoopyText.addEventListener('mouseout', (event) => {
-      console.log('mouse out!');
-      if(snoopy.anim.playbackRate !== -1) {
-        snoopy.anim.playbackRate = -1;
-        snoopy.anim.play();
-      }      
+      stop(snoopy);
      });
+
+     document.addEventListener('touchstart', (e) => {
+      if (!snoopyText.contains(e.target)) {
+        if(snoopy.anim.currentTime !== 0) {
+          stop(snoopy);
+        }
+      } else {
+        start(snoopy);
+      }
+    }, { passive: true });
 
 
 }
@@ -101,20 +116,22 @@ function initSanX() {
   const sanXText = document.getElementById('sanx-text')
 
   sanXText.addEventListener('mouseover', (event) => {
-    console.log('mouseover sanx')
-    if(sanX.anim.playbackRate !== 1) {
-      sanX.anim.playbackRate = 1;
-      sanX.anim.play();
-    }
+    start(sanX);
   })
 
   sanXText.addEventListener('mouseout', (event) => {
-    if(sanX.anim.playbackRate !== -1) {
-      sanX.anim.playbackRate = -1;
-      sanX.anim.play();
-    }
+    stop(sanX);
   })
-  
+
+  document.addEventListener('touchstart', (e) => {
+      if (!sanXText.contains(e.target)) {
+        if(sanX.anim.currentTime !== 0) {
+          stop(sanX);
+        }
+      } else {
+        start(sanX);
+      }
+    }, { passive: true });
 }
 
 function initPeek() {
