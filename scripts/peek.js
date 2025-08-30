@@ -47,7 +47,7 @@ function initSnoopy() {
     snoopy.canvas.style.top = '15%';
     // offset right since snoopy's paw should grab edge of card, but on smaller screens grab from inside
     let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    if(width >= 1000) {
+    if(width >= 950) {
       snoopy.canvas.style.right = '-101px';
       
     } else {
@@ -90,7 +90,7 @@ function initSanX() {
 
   let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   
-  if(width >= 1000) {
+  if(width >= 950) {
     sanX.canvas.style.left = '-83px';
   } else {
     sanX.canvas.style.left = '0px';
