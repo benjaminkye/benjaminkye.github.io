@@ -14,6 +14,7 @@
 
     <script defer src="/scripts/sparkle.js"></script>
     <script defer src="/scripts/bg.js"></script>
+    <script defer src="/scripts/peek.js"></script>
     <script defer src="/scripts/script.js"></script>
 </head>
 <body>
@@ -38,8 +39,8 @@
             <p>Rising senior pursuing a B.S. in Computer Science at the University of 
                 Texas at Dallas. Passionate about building practical and useful 
                 applications. Currently exploring Android and Full-stack Web development. 
-                <span class="sparkly">San-X</span> and 
-                <span class="sparkly">Snoopy</span> 
+                <span class="sparkly" id="sanx-text">San-X</span> and 
+                <span class="sparkly" id="snoopy-text">Snoopy</span> 
                 enjoyer.</p>
         </section>
 
@@ -62,8 +63,11 @@
                     <span class="tech">Gradle</span>
                     <span class="tech">Agile/Scrum</span>
                 </div>
+                <canvas id="san-x"></canvas>
+                <canvas id="snoopy"></canvas>                
             </div>
         </section>
+        
 
         <section id="projects">
             <h2>// Projects</h2>
