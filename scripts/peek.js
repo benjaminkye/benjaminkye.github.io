@@ -56,11 +56,9 @@ function initSnoopy() {
       snoopy.canvas.style.transform = 'scaleX(-1)';
     }
 
-    console.log('init peek')
     let snoopyText = document.getElementById('snoopy-text')
     
     snoopyText.addEventListener('mouseover', (event) => {
-      console.log('mouse in!');
       if(snoopy.anim.playbackRate !== 1) {
         snoopy.anim.playbackRate = 1;
         snoopy.anim.play();
@@ -68,12 +66,23 @@ function initSnoopy() {
      });
 
      snoopyText.addEventListener('mouseout', (event) => {
-      console.log('mouse out!');
       if(snoopy.anim.playbackRate !== -1) {
         snoopy.anim.playbackRate = -1;
         snoopy.anim.play();
       }      
      });
+
+     document.addEventListener('touchstart', (e) => {
+      if (!snoopyText.contains(e.target)) {
+        if(snoopy.anim.playbackRate !== -1 && snoopy.anim.currentTime !== 0) {
+          snoopy.anim.playbackRate = -1;
+          snoopy.anim.play();
+        }
+      } else {
+        snoopy.anim.playbackRate = 1;
+        snoopy.anim.play();
+      }
+    }, { passive: true });
 
 
 }
@@ -101,7 +110,6 @@ function initSanX() {
   const sanXText = document.getElementById('sanx-text')
 
   sanXText.addEventListener('mouseover', (event) => {
-    console.log('mouseover sanx')
     if(sanX.anim.playbackRate !== 1) {
       sanX.anim.playbackRate = 1;
       sanX.anim.play();
@@ -114,7 +122,18 @@ function initSanX() {
       sanX.anim.play();
     }
   })
-  
+
+  document.addEventListener('touchstart', (e) => {
+      if (!sanXText.contains(e.target)) {
+        if(sanX.anim.playbackRate !== -1 && sanX.anim.currentTime !== 0) {
+          sanX.anim.playbackRate = -1;
+          sanX.anim.play();
+        }
+      } else {
+        sanX.anim.playbackRate = 1;
+        sanX.anim.play();
+      }
+    }, { passive: true });
 }
 
 function initPeek() {
