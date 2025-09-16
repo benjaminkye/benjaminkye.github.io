@@ -134,7 +134,30 @@ function initSanX() {
     }, { passive: true });
 }
 
+function resizePeek() {
+  console.log('resize peek')
+  let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  let snoopy = document.getElementById('snoopy');
+  let sanX = document.getElementById('san-x');
+  
+  if (!snoopy || !sanX) { return; }
+  
+  if(width >= 950) {
+      snoopy.style.right = '-101px';
+      sanX.style.left = '-83px';
+      snoopy.style.transform = '';
+      sanX.style.transform = '';
+  } else {
+    snoopy.style.right = '-10px'
+    snoopy.style.transform = 'scaleX(-1)';
+    sanX.style.left = '0px';
+    sanX.style.transform = 'scaleX(-1)';
+  }
+    
+}
+
 function initPeek() {
   initSanX();
   initSnoopy();
+  window.addEventListener('resize', resizePeek)
 }
