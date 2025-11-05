@@ -51,6 +51,8 @@ function initWaves(options = {}) {
   let t = 0;
   let lastTime = 0;
   let running = true;
+  let lastWidth = 0;
+  let lastHeight = 0;
 
   const waves = [
     { speed: speeds[0], amp: amps[0], wl: wavelengths[0], color: `rgba(${waveRGB}, ${opacities[0]})`, yOff: 0.50 },
@@ -98,6 +100,12 @@ function initWaves(options = {}) {
 
     const cw = canvas.clientWidth;
     const ch = canvas.clientHeight;
+    if (cw !== lastWidth || ch !== lastHeight) {
+      resize();
+      lastWidth = cw;
+      lastHeight = ch;
+    }
+
     ctx.clearRect(0, 0, cw, ch);
 
     for (let i = 0; i < waves.length; i++) drawWave(waves[i], t);
@@ -121,8 +129,14 @@ function initWaves(options = {}) {
 
   window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', onVisibility);
+  
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', resize, { passive: true });
+  }
 
   resize();
+  lastWidth = canvas.clientWidth;
+  lastHeight = canvas.clientHeight;
   requestAnimationFrame(tick);
 
   return {
@@ -130,6 +144,9 @@ function initWaves(options = {}) {
       running = false;
       window.removeEventListener('resize', resize);
       document.removeEventListener('visibilitychange', onVisibility);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', resize);
+      }
       container.remove();
     }
   };

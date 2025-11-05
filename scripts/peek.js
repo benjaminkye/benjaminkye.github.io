@@ -1,0 +1,171 @@
+class SpriteCanvas {
+    constructor(sprite, canvasId, spriteWidth, spriteHeight, frameCount, fps) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.spriteWidth = spriteWidth;
+        this.spriteHeight = spriteHeight;
+
+        this.canvas.width = spriteWidth;
+        this.canvas.height = spriteHeight;
+
+        this.canvas.style.backgroundImage = `url(${sprite})`;
+        this.canvas.style.backgroundPosition = '0px 0px';
+        this.canvas.style.backgroundRepeat = 'no-repeat';
+        this.canvas.style.position = 'absolute';
+        
+        let totalShiftX = this.spriteWidth * -(frameCount-1);
+        this.anim = this.canvas.animate(
+            [
+                {backgroundPositionX: '0px'},
+                {backgroundPositionX: `${totalShiftX}px`}
+            ],
+            {
+              duration: frameCount * (1000/fps),
+              easing: `steps(${frameCount-1})`,
+              fill: 'both',
+              direction: 'normal',
+              iterations: 1,
+            }
+        )
+        this.anim.pause();
+        this.anim.currentTime = 0;
+        this.anim.playbackRate = 0;
+    }
+}
+
+function start(sprite) {
+  if(sprite.anim.playbackRate !== 1) {
+    sprite.anim.playbackRate = 1;
+    sprite.anim.play();
+  }
+}
+
+function stop(sprite) {
+  if(sprite.anim.playbackRate !== -1) {
+    sprite.anim.playbackRate = -1;
+    sprite.anim.play();
+  }
+}
+
+function initSnoopy() {
+    
+    const snoopy = new SpriteCanvas(
+      sprite='assets/snoopy.png', 
+      canvasId='snoopy', 
+      spriteWidth=110, 
+      spriteHeight=134, 
+      frameCount=13, 
+      fps=20
+    );
+
+    snoopy.canvas.style.top = '15%';
+    // offset right since snoopy's paw should grab edge of card, but on smaller screens grab from inside
+    let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    if(width >= 950) {
+      snoopy.canvas.style.right = '-101px';
+      
+    } else {
+      snoopy.canvas.style.right = '-10px';
+      //reverse image facing direction
+      snoopy.canvas.style.transform = 'scaleX(-1)';
+    }
+
+    let snoopyText = document.getElementById('snoopy-text')
+    
+    snoopyText.addEventListener('mouseover', (event) => {
+      start(snoopy)
+     });
+
+     snoopyText.addEventListener('mouseout', (event) => {
+      stop(snoopy);
+     });
+
+     document.addEventListener('touchstart', (e) => {
+      if (!snoopyText.contains(e.target)) {
+        if(snoopy.anim.currentTime !== 0) {
+          stop(snoopy);
+        }
+      } else {
+        let rect = snoopy.canvas.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight) {
+          snoopy.canvas.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+        }
+        start(snoopy);
+      }
+    }, { passive: true });
+
+
+}
+
+function initSanX() {
+  const sanX = new SpriteCanvas(
+    sprite='assets/rilakkuma.png',
+    canvasId = 'san-x',
+    spriteWidth = 82,
+    spriteHeight = 230,
+    frameCount = 13,
+    fps = 20,
+  );
+
+  let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  
+  if(width >= 950) {
+    sanX.canvas.style.left = '-83px';
+  } else {
+    sanX.canvas.style.left = '0px';
+    sanX.canvas.style.transform = 'scaleX(-1)';
+  }
+
+  sanX.canvas.style.bottom = '0';
+  const sanXText = document.getElementById('sanx-text')
+
+  sanXText.addEventListener('mouseover', (event) => {
+    start(sanX);
+  })
+
+  sanXText.addEventListener('mouseout', (event) => {
+    stop(sanX);
+  })
+
+  document.addEventListener('touchstart', (e) => {
+      if (!sanXText.contains(e.target)) {
+        if(sanX.anim.currentTime !== 0) {
+          stop(sanX);
+        }
+      } else {
+        let rect = sanX.canvas.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight) {
+          sanX.canvas.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+        }
+        start(sanX);        
+      }
+    }, { passive: true });
+}
+
+function resizePeek() {
+  console.log('resize peek')
+  let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  let snoopy = document.getElementById('snoopy');
+  let sanX = document.getElementById('san-x');
+  
+  if (!snoopy || !sanX) { return; }
+  
+  if(width >= 950) {
+      snoopy.style.right = '-101px';
+      sanX.style.left = '-83px';
+      snoopy.style.transform = '';
+      sanX.style.transform = '';
+  } else {
+    snoopy.style.right = '-10px'
+    snoopy.style.transform = 'scaleX(-1)';
+    sanX.style.left = '0px';
+    sanX.style.transform = 'scaleX(-1)';
+  }
+    
+}
+
+function initPeek() {
+  initSanX();
+  initSnoopy();
+  window.addEventListener('resize', resizePeek)
+}

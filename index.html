@@ -16,6 +16,7 @@
 
     <script defer src="/scripts/sparkle.js"></script>
     <script defer src="/scripts/bg.js"></script>
+    <script defer src="/scripts/peek.js"></script>
     <script defer src="/scripts/script.js"></script>
 </head>
 <body>
@@ -37,11 +38,10 @@
 
         <section id="about">
             <h2>// About</h2>
-            <p>Rising senior pursuing a B.S. in Computer Science at the University of 
-                Texas at Dallas. Passionate about building practical and useful 
+            <p>Senior at the University of Texas at Dallas pursuing a B.S. in Computer Science. Passionate about building practical and useful 
                 applications. Currently exploring Android and Full-stack Web development. 
-                <span class="sparkly">San-X</span> and 
-                <span class="sparkly">Snoopy</span> 
+                <span class="sparkly" id="sanx-text">San-X</span> and 
+                <span class="sparkly" id="snoopy-text">Snoopy</span> 
                 enjoyer.</p>
         </section>
 
@@ -64,12 +64,32 @@
                     <span class="tech">Gradle</span>
                     <span class="tech">Agile/Scrum</span>
                 </div>
+                <canvas id="san-x"></canvas>
+                <canvas id="snoopy"></canvas>                
             </div>
         </section>
+        
 
         <section id="projects">
             <h2>// Projects</h2>
             
+            <div class="project">
+                <div class="project-header">
+                    <h3>Whiteboard - Chrome Extension</h3>
+                    <div class="project-buttons">
+                        <a href="https://chromewebstore.google.com/detail/hgoiijmhpdjkmecnlkpdcflgfjebpbhe" target="_blank" class="project-button">Website</a>
+                        <a href="https://github.com/sunnyguan/whiteboard" target="_blank" class="project-button">Github</a>
+                    </div>
+                </div>
+                <p>Took over maintenance of a Chrome extension with 1,000+ users that revamps UT Dallas's eLearning (Blackboard) interface. Migrated the codebase to Manifest V3, resolved bugs, refactored code, and shipped new features that improved student usability.</p>
+                <div class="tech-stack">
+                    <span class="tech">HTML</span>
+                    <span class="tech">CSS</span>
+                    <span class="tech">JavaScript</span>
+                    <span class="tech">Git</span>
+                </div>
+            </div>
+
             <div class="project">
                 <div class="project-header">
                     <h3>Cleanify - Spotify Playlist Utility</h3>
