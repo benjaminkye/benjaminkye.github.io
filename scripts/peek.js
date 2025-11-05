@@ -86,6 +86,10 @@ function initSnoopy() {
           stop(snoopy);
         }
       } else {
+        let rect = snoopy.canvas.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight) {
+          snoopy.canvas.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+        }
         start(snoopy);
       }
     }, { passive: true });
@@ -129,7 +133,11 @@ function initSanX() {
           stop(sanX);
         }
       } else {
-        start(sanX);
+        let rect = sanX.canvas.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight) {
+          sanX.canvas.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+        }
+        start(sanX);        
       }
     }, { passive: true });
 }
