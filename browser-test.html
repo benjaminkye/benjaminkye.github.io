@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browser Test Page</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+      line-height: 1.5;
+    }
+
+    section {
+      margin: 36px 0;
+      padding: 20px;
+      border: 1px solid #8885;
+      border-radius: 12px;
+    }
+
+    h1, h2 {
+      line-height: 1.2;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 14px;
+      border: 1px solid #8885;
+      border-radius: 10px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    code {
+      background: #8882;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    .spacer {
+      height: 700px;
+      display: grid;
+      place-items: center;
+      border: 1px dashed #8887;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+  
+    .test-output {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px dashed #8887;
+      border-radius: 8px;
+      min-height: 1.5em;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    iframe {
+      width: 100%;
+      min-height: 240px;
+      border: 1px solid #8885;
+      border-radius: 8px;
+    }
+
+    video, audio {
+      width: 100%;
+      max-width: 640px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Browser Test Page</h1>
+  <p>
+    A test page for custom iOS / WKWebView browsers, including navigation,
+    popups, images, media, history, storage, downloads, file input, dialogs,
+    iframe behavior, and tab reload/offloading detection.
+  </p>
+
+  <p><strong>Page load count:</strong> <span id="load-count">calculating…</span></p>
+  <p>
+    This counter uses <code>localStorage</code>. If a discarded tab is recreated
+    and this document reloads, the number should increase.
+  </p>
+
+  <nav>
+    <a href="#links">Links</a> |
+    <a href="#images">Images</a> |
+    <a href="#controls">Controls</a> |
+    <a href="#history">History</a> |
+    <a href="#dialogs">Dialogs</a> |
+    <a href="#storage">Storage</a> |
+    <a href="#media">Media</a> |
+    <a href="#iframe-test">Iframe</a> |
+    <a href="#files-downloads">Files</a> |
+    <a href="#scroll-target">Scroll target</a>
+  </nav>
+
+  <section id="links">
+    <h2>Links</h2>
+
+    <p>
+      <a href="https://example.com/">Normal external link — same tab</a>
+    </p>
+
+    <p>
+      <a href="https://example.com/" target="_blank">
+        External link — opens a new tab
+      </a>
+    </p>
+
+    <p>
+      <a href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer">
+        New-tab link with rel="noopener noreferrer"
+      </a>
+    </p>
+
+    <p>
+      <a href="./">Relative link to this site's root</a>
+    </p>
+
+    <p>
+      <a href="#scroll-target">Fragment link — jump farther down this page</a>
+    </p>
+
+    <p>
+      <a href="mailto:test@example.com">mailto: link</a>
+    </p>
+
+    <p>
+      <a href="tel:+15551234567">tel: link</a>
+    </p>
+  </section>
+
+  <section id="images">
+    <h2>Images</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Plain image</h3>
+        <p>This image has no link.</p>
+        <img
+          src="https://picsum.photos/seed/plain-image/480/300"
+          alt="Random test image with no link"
+        />
+      </div>
+
+      <div class="card">
+        <h3>Linked image — same tab</h3>
+        <p>Clicking the image navigates in the current tab.</p>
+        <a href="https://example.com/">
+          <img
+            src="https://picsum.photos/seed/same-tab-image/480/300"
+            alt="Random image linked to example.com"
+          />
+        </a>
+      </div>
+
+      <div class="card">
+        <h3>Linked image — new tab</h3>
+        <p>Clicking the image should create/open another tab.</p>
+        <a href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer">
+          <img
+            src="https://picsum.photos/seed/new-tab-image/480/300"
+            alt="Random image linked to Wikipedia in a new tab"
+          />
+        </a>
+      </div>
+
+      <div class="card">
+        <h3>Broken image</h3>
+        <p>Useful for testing failed image loading and alt text.</p>
+        <img
+          src="./this-image-does-not-exist-12345.png"
+          alt="This image intentionally fails to load"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section id="controls">
+    <h2>Buttons / JavaScript Navigation</h2>
+
+    <p>
+      <button onclick="window.location.href='https://example.com/'">
+        JS: navigate current tab
+      </button>
+    </p>
+
+    <p>
+      <button onclick="window.open('https://example.com/', '_blank')">
+        JS: window.open new tab
+      </button>
+    </p>
+
+    <p>
+      <button onclick="alert('JavaScript alert works!')">
+        Show alert
+      </button>
+    </p>
+
+    <p>
+      <button onclick="document.getElementById('status').textContent = 'Button clicked at ' + new Date().toLocaleTimeString()">
+        Modify page with JavaScript
+      </button>
+    </p>
+
+    <p id="status">Status: waiting for interaction.</p>
+  </section>
+
+  <section>
+    <h2>Form Elements</h2>
+
+    <form onsubmit="event.preventDefault(); document.getElementById('form-result').textContent = 'Form submitted: ' + this.elements.test.value;">
+      <label>
+        Text input:
+        <input name="test" type="text" placeholder="Type something..." />
+      </label>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <p id="form-result"></p>
+
+    <p>
+      <label>
+        Select:
+        <select>
+          <option>Option A</option>
+          <option>Option B</option>
+          <option>Option C</option>
+        </select>
+      </label>
+    </p>
+
+    <p>
+      <label>
+        <input type="checkbox" />
+        Checkbox
+      </label>
+    </p>
+  </section>
+
+
+  <section id="history">
+    <h2>History / Same-document Navigation</h2>
+    <p>
+      Tests <code>history.pushState()</code>, <code>history.back()</code>,
+      <code>history.forward()</code>, and <code>popstate</code>.
+    </p>
+
+    <p>
+      <button onclick="pushHistoryState()">Push history state</button>
+      <button onclick="history.back()">history.back()</button>
+      <button onclick="history.forward()">history.forward()</button>
+    </p>
+
+    <div id="history-output" class="test-output">No history events yet.</div>
+  </section>
+
+  <section id="dialogs">
+    <h2>JavaScript Dialogs</h2>
+    <p>
+      WKWebView hosts commonly need explicit <code>WKUIDelegate</code> handling
+      for these.
+    </p>
+
+    <p>
+      <button onclick="alert('WKWebView alert test')">alert()</button>
+      <button onclick="runConfirm()">confirm()</button>
+      <button onclick="runPrompt()">prompt()</button>
+    </p>
+
+    <div id="dialog-output" class="test-output">No dialog result yet.</div>
+  </section>
+
+  <section id="storage">
+    <h2>Storage / Cookies</h2>
+
+    <p>
+      <button onclick="writeStorage()">Write local/session storage</button>
+      <button onclick="readStorage()">Read storage</button>
+      <button onclick="clearStorage()">Clear storage</button>
+    </p>
+
+    <p>
+      <button onclick="setTestCookie()">Set cookie</button>
+      <button onclick="showCookies()">Show document.cookie</button>
+    </p>
+
+    <div id="storage-output" class="test-output">No storage operation yet.</div>
+  </section>
+
+  <section id="media">
+    <h2>Media / Tab Offloading Test</h2>
+
+    <p>
+      Start playback, switch to another tab, and leave this tab inactive.
+      If your browser protects active media tabs from unloading, this page should
+      stay alive while media is playing.
+    </p>
+
+    <h3>Video</h3>
+    <video id="test-video" controls playsinline preload="metadata">
+      <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+      Your browser does not support HTML video.
+    </video>
+
+    <h3>Audio</h3>
+    <audio id="test-audio" controls preload="metadata">
+      <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3" type="audio/mpeg" />
+      Your browser does not support HTML audio.
+    </audio>
+
+    <p>
+      <button onclick="showMediaState()">Show media state</button>
+    </p>
+
+    <div id="media-output" class="test-output">No media state checked yet.</div>
+  </section>
+
+  <section id="iframe-test">
+    <h2>Iframe Navigation</h2>
+    <p>
+      Useful for checking whether navigation policy or context-menu handling
+      incorrectly treats frame navigation as top-level navigation.
+    </p>
+
+    <iframe
+      title="Browser iframe test"
+      srcdoc='
+        <!DOCTYPE html>
+        <html>
+          <body style="font-family: system-ui; padding: 16px">
+            <h3>Iframe contents</h3>
+            <p><a href="https://example.com/">Same-frame external link</a></p>
+            <p><a href="https://example.com/" target="_blank">Iframe target=_blank</a></p>
+            <p><a href="https://example.com/" target="_top">Iframe target=_top</a></p>
+          
+  <script>
+    // Reload/offloading detection.
+    (() => {
+      const key = "wkwebviewBrowserTestLoadCount";
+      const count = Number(localStorage.getItem(key) || "0") + 1;
+      localStorage.setItem(key, String(count));
+      document.getElementById("load-count").textContent = String(count);
+    })();
+
+    // History tests.
+    let historyStateNumber = 0;
+
+    function pushHistoryState() {
+      historyStateNumber++;
+      const state = { testState: historyStateNumber };
+      history.pushState(state, "", "#history-state-" + historyStateNumber);
+      document.getElementById("history-output").textContent =
+        "Pushed state " + historyStateNumber + "\\nURL: " + location.href;
+    }
+
+    window.addEventListener("popstate", event => {
+      document.getElementById("history-output").textContent =
+        "popstate fired\\nstate: " + JSON.stringify(event.state) +
+        "\\nURL: " + location.href;
+    });
+
+    // Dialog tests.
+    function runConfirm() {
+      const result = confirm("Confirm dialog test. Choose OK or Cancel.");
+      document.getElementById("dialog-output").textContent =
+        "confirm() returned: " + result;
+    }
+
+    function runPrompt() {
+      const result = prompt("Prompt dialog test. Enter any value:", "test value");
+      document.getElementById("dialog-output").textContent =
+        "prompt() returned: " + JSON.stringify(result);
+    }
+
+    // Storage tests.
+    function writeStorage() {
+      localStorage.setItem("browserTestLocal", "local-" + Date.now());
+      sessionStorage.setItem("browserTestSession", "session-" + Date.now());
+      readStorage();
+    }
+
+    function readStorage() {
+      document.getElementById("storage-output").textContent =
+        "localStorage: " + localStorage.getItem("browserTestLocal") +
+        "\\nsessionStorage: " + sessionStorage.getItem("browserTestSession") +
+        "\\ncookies: " + document.cookie;
+    }
+
+    function clearStorage() {
+      localStorage.removeItem("browserTestLocal");
+      sessionStorage.removeItem("browserTestSession");
+      document.cookie = "wkwebviewTestCookie=; Max-Age=0; path=/";
+      readStorage();
+    }
+
+    function setTestCookie() {
+      document.cookie =
+        "wkwebviewTestCookie=" + encodeURIComponent("cookie-" + Date.now()) +
+        "; path=/; SameSite=Lax";
+      showCookies();
+    }
+
+    function showCookies() {
+      document.getElementById("storage-output").textContent =
+        "document.cookie: " + (document.cookie || "(empty)");
+    }
+
+    // Media tests.
+    function showMediaState() {
+      const video = document.getElementById("test-video");
+      const audio = document.getElementById("test-audio");
+
+      document.getElementById("media-output").textContent =
+        "Video paused: " + video.paused +
+        "\\nVideo time: " + video.currentTime.toFixed(2) +
+        "\\nAudio paused: " + audio.paused +
+        "\\nAudio time: " + audio.currentTime.toFixed(2) +
+        "\\nDocument hidden: " + document.hidden +
+        "\\nVisibility state: " + document.visibilityState;
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      const el = document.getElementById("media-output");
+      if (el) {
+        el.textContent =
+          "visibilitychange fired\\nDocument hidden: " + document.hidden +
+          "\\nVisibility state: " + document.visibilityState;
+      }
+    });
+
+    // File input.
+    function showSelectedFile() {
+      const input = document.getElementById("file-input");
+      const file = input.files && input.files[0];
+
+      document.getElementById("file-output").textContent = file
+        ? [
+            "name: " + file.name,
+            "type: " + (file.type || "(unknown)"),
+            "size: " + file.size + " bytes"
+          ].join("\\n")
+        : "No file selected.";
+    }
+
+    // Popup policy test.
+    function delayedPopup() {
+      document.getElementById("popup-output").textContent =
+        "Waiting 1 second before calling window.open()...";
+
+      setTimeout(() => {
+        const popup = window.open("https://example.com/", "_blank");
+        document.getElementById("popup-output").textContent =
+          popup
+            ? "Delayed popup returned a Window object."
+            : "Delayed popup was blocked or window.open returned null.";
+      }, 1000);
+    }
+
+    // Useful console events while debugging WKWebView.
+    window.addEventListener("pageshow", event => {
+      console.log("pageshow", { persisted: event.persisted });
+    });
+
+    window.addEventListener("pagehide", event => {
+      console.log("pagehide", { persisted: event.persisted });
+    });
+
+    window.addEventListener("beforeunload", () => {
+      console.log("beforeunload fired");
+    });
+  </script>
+
+</body>
+        </html>
+      '>
+    </iframe>
+  </section>
+
+  <section id="files-downloads">
+    <h2>File Input / Downloads</h2>
+
+    <h3>File upload</h3>
+    <p>
+      <input id="file-input" type="file" onchange="showSelectedFile()" />
+    </p>
+    <div id="file-output" class="test-output">No file selected.</div>
+
+    <h3>Download links</h3>
+    <p>
+      <a
+        href="data:text/plain;charset=utf-8,Hello%20from%20the%20WKWebView%20browser%20test%20page."
+        download="wkwebview-test.txt"
+      >
+        Download a generated text file
+      </a>
+    </p>
+
+    <p>
+      <a
+        href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+        target="_blank"
+      >
+        Open a PDF in a new tab
+      </a>
+    </p>
+  </section>
+
+  <section id="popup-tests">
+    <h2>Popup / New Window Behavior</h2>
+
+    <p>
+      <button onclick="window.open('https://example.com/', '_blank')">
+        User-gesture window.open()
+      </button>
+    </p>
+
+    <p>
+      <button onclick="delayedPopup()">
+        Attempt delayed window.open() after 1 second
+      </button>
+    </p>
+
+    <p>
+      The delayed popup may be blocked because it is no longer directly tied
+      to a user gesture. This is useful for checking popup-policy behavior.
+    </p>
+
+    <div id="popup-output" class="test-output">No popup attempted yet.</div>
+  </section>
+
+  <section>
+    <h2>Long-page / scrolling test</h2>
+    <p>Use this to test scrolling, retained page state, or back/forward restoration.</p>
+    <div class="spacer">Scroll down ↓</div>
+  </section>
+
+  <section id="scroll-target">
+    <h2>Scroll Target</h2>
+    <p>
+      You reached <code>#scroll-target</code>.
+      <a href="#top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">
+        Scroll back to top
+      </a>
+    </p>
+  </section>
+
+  <footer>
+    <hr />
+    <p>End of browser test page.</p>
+  </footer>
+
+  <script>
+    // Reload/offloading detection.
+    (() => {
+      const key = "wkwebviewBrowserTestLoadCount";
+      const count = Number(localStorage.getItem(key) || "0") + 1;
+      localStorage.setItem(key, String(count));
+      document.getElementById("load-count").textContent = String(count);
+    })();
+
+    // History tests.
+    let historyStateNumber = 0;
+
+    function pushHistoryState() {
+      historyStateNumber++;
+      const state = { testState: historyStateNumber };
+      history.pushState(state, "", "#history-state-" + historyStateNumber);
+      document.getElementById("history-output").textContent =
+        "Pushed state " + historyStateNumber + "\\nURL: " + location.href;
+    }
+
+    window.addEventListener("popstate", event => {
+      document.getElementById("history-output").textContent =
+        "popstate fired\\nstate: " + JSON.stringify(event.state) +
+        "\\nURL: " + location.href;
+    });
+
+    // Dialog tests.
+    function runConfirm() {
+      const result = confirm("Confirm dialog test. Choose OK or Cancel.");
+      document.getElementById("dialog-output").textContent =
+        "confirm() returned: " + result;
+    }
+
+    function runPrompt() {
+      const result = prompt("Prompt dialog test. Enter any value:", "test value");
+      document.getElementById("dialog-output").textContent =
+        "prompt() returned: " + JSON.stringify(result);
+    }
+
+    // Storage tests.
+    function writeStorage() {
+      localStorage.setItem("browserTestLocal", "local-" + Date.now());
+      sessionStorage.setItem("browserTestSession", "session-" + Date.now());
+      readStorage();
+    }
+
+    function readStorage() {
+      document.getElementById("storage-output").textContent =
+        "localStorage: " + localStorage.getItem("browserTestLocal") +
+        "\\nsessionStorage: " + sessionStorage.getItem("browserTestSession") +
+        "\\ncookies: " + document.cookie;
+    }
+
+    function clearStorage() {
+      localStorage.removeItem("browserTestLocal");
+      sessionStorage.removeItem("browserTestSession");
+      document.cookie = "wkwebviewTestCookie=; Max-Age=0; path=/";
+      readStorage();
+    }
+
+    function setTestCookie() {
+      document.cookie =
+        "wkwebviewTestCookie=" + encodeURIComponent("cookie-" + Date.now()) +
+        "; path=/; SameSite=Lax";
+      showCookies();
+    }
+
+    function showCookies() {
+      document.getElementById("storage-output").textContent =
+        "document.cookie: " + (document.cookie || "(empty)");
+    }
+
+    // Media tests.
+    function showMediaState() {
+      const video = document.getElementById("test-video");
+      const audio = document.getElementById("test-audio");
+
+      document.getElementById("media-output").textContent =
+        "Video paused: " + video.paused +
+        "\\nVideo time: " + video.currentTime.toFixed(2) +
+        "\\nAudio paused: " + audio.paused +
+        "\\nAudio time: " + audio.currentTime.toFixed(2) +
+        "\\nDocument hidden: " + document.hidden +
+        "\\nVisibility state: " + document.visibilityState;
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      const el = document.getElementById("media-output");
+      if (el) {
+        el.textContent =
+          "visibilitychange fired\\nDocument hidden: " + document.hidden +
+          "\\nVisibility state: " + document.visibilityState;
+      }
+    });
+
+    // File input.
+    function showSelectedFile() {
+      const input = document.getElementById("file-input");
+      const file = input.files && input.files[0];
+
+      document.getElementById("file-output").textContent = file
+        ? [
+            "name: " + file.name,
+            "type: " + (file.type || "(unknown)"),
+            "size: " + file.size + " bytes"
+          ].join("\\n")
+        : "No file selected.";
+    }
+
+    // Popup policy test.
+    function delayedPopup() {
+      document.getElementById("popup-output").textContent =
+        "Waiting 1 second before calling window.open()...";
+
+      setTimeout(() => {
+        const popup = window.open("https://example.com/", "_blank");
+        document.getElementById("popup-output").textContent =
+          popup
+            ? "Delayed popup returned a Window object."
+            : "Delayed popup was blocked or window.open returned null.";
+      }, 1000);
+    }
+
+    // Useful console events while debugging WKWebView.
+    window.addEventListener("pageshow", event => {
+      console.log("pageshow", { persisted: event.persisted });
+    });
+
+    window.addEventListener("pagehide", event => {
+      console.log("pagehide", { persisted: event.persisted });
+    });
+
+    window.addEventListener("beforeunload", () => {
+      console.log("beforeunload fired");
+    });
+  </script>
+
+</body>
+</html>
